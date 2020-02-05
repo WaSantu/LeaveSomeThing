@@ -1,0 +1,350 @@
+<template>
+    <div class="opreate-page">
+        <div class="opreate">
+            <div class="opreate-cell">
+                <img src="../../assets/img/note.png" alt="">
+            </div>
+            <div class="opreate-cell" @click='showPicBox'>
+                <img src="../../assets/img/pic.png" alt="">
+            </div>
+            <div class="opreate-cell">
+                <img src="../../assets/img/video.png" alt="">
+            </div>
+            <div class="opreate-cell" @click="()=>popshow=true">
+                <img src="../../assets/img/setting.png" alt="">
+            </div>
+        </div>
+        <Footer />
+        <Popup :show.sync='popshow' @maskclick='close'>
+            <div class="">
+                <Radio :value.sync='c' />
+            </div>
+        </Popup>
+        <div class="pic-opreate" v-if='picshow'>
+            <input type="file" multiple style="display:none;" id='pic'>
+            <div class="pic-func">
+                <div class="pic-upload">
+                    <div class="pic-choose" @drop="test" @dragover="test2">
+                        <span>拖拽文件至此 或 <label class="lab" for='pic'>点击上传</label></span>
+                    </div>
+                    <div class="pic-des">
+                        <div class="pic-name ppp">
+                            <span>图片/图片组名称</span>
+                            <input type="text">
+                        </div>
+                        <div class="pic-info ppp">
+                            <span>图片/图片组描述</span>
+                            <textarea></textarea>
+                        </div>
+                        <div class="pic-submit">
+                            <Button text='上传' width='100' height='30' />
+                            <span class="cancel" @click="()=>picshow=false">取消</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pic-display">
+                    <div class="cell-wrap">
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+                        <div class="pic-cell">
+                            <div class="img"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="pic-layout">
+                <div class="forpic">
+                    <img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1580916475&di=6933fedb219bd1d3464de64f3b9a438a&src=http://media-cdn.tripadvisor.com/media/photo-s/03/f8/81/70/tup-island.jpg" alt="">
+                </div>
+                <div class="pic-detail"></div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import Footer from '../../components/footer/footer'
+    import Popup from '../../components/popup/popup'
+    import Radio from '../../components/radio/radio'
+    import Button from '../../components/button/button'
+    export default {
+        name: 'Opreate',
+        components: {
+            Footer,
+            Popup,
+            Radio,
+            Button
+        },
+        data() {
+            return {
+                popshow: false,
+                c: false,
+                picshow: false
+            }
+        },
+        mounted() {
+
+        },
+        methods: {
+            close: function () {
+                this.popshow = false
+            },
+            showPicBox: function () {
+                this.picshow = !this.picshow
+            },
+            test: function (e) {
+                e.preventDefault()
+                console.log(e.dataTransfer.files)
+            },
+            test2: function (e) {
+                e.preventDefault();
+            }
+        }
+    }
+</script>
+
+<style scoped>
+    .opreate-page {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .opreate {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    .opreate-cell {
+        height: 120px;
+        width: 120px;
+        border-radius: 10px;
+        box-shadow: 0 0 5px 0 #d5d5d5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 35px;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+
+    .opreate-cell:hover {
+        transform: scale(1.1);
+    }
+
+    .pic-opreate {
+        position: fixed;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        width: 100%;
+        background: rgba(0, 0, 0, .3);
+        box-sizing: border-box;
+        display: flex;
+
+    }
+
+    .pic-func {
+        box-shadow: 0 0 5px #d5d5d5;
+        width: 400px;
+        height: 100vh;
+        box-sizing: border-box;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pic-choose {
+        height: 200px;
+        width: 330px;
+        border: 1px dashed #5698c3;
+        border-radius: 10px;
+        font-size: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .lab {
+        color: #5698c3;
+        cursor: pointer;
+    }
+
+    .ppp {
+        display: flex;
+        flex-direction: column;
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+
+    .ppp input {
+        height: 20px;
+        width: 330px;
+        border-radius: 5px;
+        border: 1px solid #d5d5d5;
+        margin-top: 5px;
+        padding-left: 5px;
+        transition: all .3s ease-in-out;
+    }
+
+    .ppp textarea {
+        width: 330px;
+        height: 90px;
+        resize: none;
+        border: 1px solid #d5d5d5;
+        border-radius: 5px;
+        outline: none;
+        padding: 5px;
+        margin-top: 5px;
+        transition: all .3s ease-in-out;
+    }
+
+    .ppp input:focus,
+    .ppp textarea:focus {
+        border: 1px solid #8fb2c9;
+    }
+
+    .pic-des {
+        margin-top: 20px;
+    }
+
+    .cancel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #5698c3;
+        font-size: 14px;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100px;
+        margin-left: 10px;
+    }
+
+    .pic-submit {
+        display: flex;
+        margin-top: 15px;
+    }
+
+    .pic-upload {
+        padding: 15px 20px;
+        border-bottom: 1px solid #e5e5e5;
+        height: 500px;
+    }
+
+    .pic-display {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .img {
+        height: 120px;
+        width: 100px;
+        background: #ccc;
+    }
+    .cell-wrap {
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+        margin-left: 15px;
+        box-sizing: border-box;
+        padding: 17px 34px 17px 0;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .pic-cell {
+        margin-bottom: 20px;
+        transition: all .2s ease;
+        cursor: pointer;
+    }
+    .pic-cell:hover {
+        transform: scale(1.1);
+    }
+    .pic-cell:nth-child(3n-1){
+        margin: 0 20px;
+    }
+    .pic-layout {
+        flex:1;
+        display: flex;
+
+    }
+    .pic-detail {
+        width: 300px;
+        height: 100vh;
+        background: #fff;
+    }
+    .forpic {
+        flex:1;
+        box-shadow: 0 0 5px #d5d5d5;
+        display: flex;
+        align-items: center;
+        justify-content: center;    
+    }
+    .forpic img {
+        width: 50%;
+    }
+</style>
