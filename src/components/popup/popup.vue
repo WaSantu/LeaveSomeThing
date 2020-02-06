@@ -2,7 +2,9 @@
     <div class="popup" v-show="show" @click.self="maskclick">
         <transition name='pop'>
             <div class="pop-container" v-show='show'>
-                <span @click="close">关闭</span>
+                <div class="top">
+                    <span @click="close">关闭</span>
+                </div>
                 <slot></slot>
             </div>
         </transition>
@@ -60,5 +62,11 @@
         {
         opacity: 0;
         transform: translateY(700px)
+    }
+    .top {
+        text-align: right;
+    }
+    .top span {
+        cursor: pointer;
     }
 </style>

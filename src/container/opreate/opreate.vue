@@ -10,12 +10,51 @@
             <div class="opreate-cell">
                 <img src="../../assets/img/video.png" alt="">
             </div>
-            <div class="opreate-cell" @click="()=>popshow=true">
-                <img src="../../assets/img/setting.png" alt="">
+            <div class="opreate-cell" @click="()=>popshow_my=true">
+                <img src="../../assets/img/my.png" alt="">
             </div>
+            <div class="opreate-cell" @click="()=>popshow_setting=true">
+                <img src="../../assets/img/setting.png" alt="">
+            </div> 
         </div>
         <Footer />
-        <Popup :show.sync='popshow' @maskclick='close'>
+        <Popup :show.sync='popshow_my' @maskclick='close'>
+            <div class="">
+                <div class="pop-my-co">
+                    <span>姓名:</span>
+                    <span>测试</span>
+                </div>
+                <div class="pop-my-co">
+                    <span>姓名:</span>
+                    <span>测试</span>
+                </div>
+                <div class="pop-my-co">
+                    <span>姓名:</span>
+                    <span>测试</span>
+                </div>
+                <div class="pop-my-co">
+                    <span>姓名:</span>
+                    <span>测试</span>
+                </div>
+                <div class="pop-my-co">
+                    <span>姓名:</span>
+                    <span>测试</span>
+                </div>
+                <div class="pop-my-co">
+                    <span>姓名:</span>
+                    <span>测试</span>
+                </div>
+                <div class="pop-my-co">
+                    <span>姓名:</span>
+                    <span>测试</span>
+                </div>
+                <div class="pop-my-co">
+                    <span>姓名:</span>
+                    <span>测试</span>
+                </div>
+            </div>
+        </Popup>
+        <Popup :show.sync='popshow_setting' @maskclick='close'>
             <div class="">
                 <Radio :value.sync='c' />
             </div>
@@ -113,9 +152,29 @@
             </div>
             <div class="pic-layout">
                 <div class="forpic">
-                    <img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1580916475&di=6933fedb219bd1d3464de64f3b9a438a&src=http://media-cdn.tripadvisor.com/media/photo-s/03/f8/81/70/tup-island.jpg" alt="">
+                    <div class="imgbox">
+                        <img class="img-button" src="../../assets/img/prev.png" alt="">
+                        <img class="img-pic" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581006252582&di=0064d39b1897e5d98590b9fd2ff4c836&imgtype=0&src=http%3A%2F%2Fa3.att.hudong.com%2F14%2F75%2F01300000164186121366756803686.jpg" alt="">
+                        <img class='img-button' src="../../assets/img/next.png" alt="">
+                    </div>
+                    <div class="img-length">
+                        <span>1/9</span>
+                    </div>
                 </div>
-                <div class="pic-detail"></div>
+                <div class="pic-detail">
+                    <div class="pic-co">
+                        <span>上传时间:</span>
+                        <span class="q">2020年2月6日</span>
+                    </div>
+                    <div class="pic-co">
+                        <span>照片名称:</span>
+                        <span class="q">哈哈哈哈</span>
+                    </div>
+                    <div class="pic-co">
+                        <span>照片描述:</span>
+                        <span class="q">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -136,7 +195,8 @@
         },
         data() {
             return {
-                popshow: false,
+                popshow_my: false,
+                popshow_setting:false,
                 c: false,
                 picshow: false
             }
@@ -146,7 +206,7 @@
         },
         methods: {
             close: function () {
-                this.popshow = false
+                this.popshow_my = false
             },
             showPicBox: function () {
                 this.picshow = !this.picshow
@@ -336,6 +396,8 @@
         width: 300px;
         height: 100vh;
         background: #fff;
+        padding: 20px;
+        box-sizing: border-box;
     }
     .forpic {
         flex:1;
@@ -343,8 +405,33 @@
         display: flex;
         align-items: center;
         justify-content: center;    
+        flex-direction: column;
     }
-    .forpic img {
-        width: 50%;
+    .img-pic {
+        margin: 0 20px;
+        width: 500px;
+    }
+    .imgbox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .img-button{
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+    }
+    .img-length {
+        font-size: 20px;
+        color: #fff;
+        margin-top: 15px;
+    }
+    .pic-co {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+    .q {
+        font-size:14px;
     }
 </style>
