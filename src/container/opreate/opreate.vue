@@ -1,7 +1,7 @@
 <template>
     <div class="opreate-page">
         <div class="opreate">
-            <div class="opreate-cell">
+            <div class="opreate-cell" @click="()=>popshow_writing=true">
                 <img src="../../assets/img/note.png" alt="">
             </div>
             <div class="opreate-cell" @click='showPicBox'>
@@ -18,46 +18,52 @@
             </div> 
         </div>
         <Footer />
-        <Popup :show.sync='popshow_my' @maskclick='close'>
+        <Popup :show.sync='popshow_my' @maskclick='closedetail'>
             <div class="">
                 <div class="pop-my-co">
-                    <span>姓名:</span>
-                    <span>测试</span>
+                    <span>账号名:</span>
+                    <span class="cooo">测试</span>
                 </div>
                 <div class="pop-my-co">
-                    <span>姓名:</span>
-                    <span>测试</span>
+                    <span>空间使用:</span>
+                    <span class="cooo">50/100mb</span>
                 </div>
                 <div class="pop-my-co">
-                    <span>姓名:</span>
-                    <span>测试</span>
+                    <span>手机号码:</span>
+                    <span class="cooo">18981662752</span>
                 </div>
                 <div class="pop-my-co">
-                    <span>姓名:</span>
-                    <span>测试</span>
+                    <span>备用联系方式:</span>
+                    <span class="cooo">18981662752</span>
                 </div>
                 <div class="pop-my-co">
-                    <span>姓名:</span>
-                    <span>测试</span>
+                    <span>本人姓名:</span>
+                    <span class="cooo">测试的</span>
                 </div>
                 <div class="pop-my-co">
-                    <span>姓名:</span>
-                    <span>测试</span>
+                    <span>交付人姓名:</span>
+                    <span class="cooo">测试</span>
                 </div>
                 <div class="pop-my-co">
-                    <span>姓名:</span>
-                    <span>测试</span>
-                </div>
-                <div class="pop-my-co">
-                    <span>姓名:</span>
-                    <span>测试</span>
+                    <span>交付人联系电话:</span>
+                    <span class="cooo">18981662752</span>
                 </div>
             </div>
         </Popup>
-        <Popup :show.sync='popshow_setting' @maskclick='close'>
+        <Popup :show.sync='popshow_setting' @maskclick='closeset'>
             <div class="">
-                <Radio :value.sync='c' />
+                <div class="setting-cp">
+                    <span>文字内容自动保持</span>
+                    <Radio :value.sync='c' />
+                </div>
+                <div class="setting-cp">
+                    <span>开起服务</span>
+                    <Radio :value.sync='c' />
+                </div>
             </div>
+        </Popup>
+        <Popup :show.sync='popshow_writing' @maskclick='closeset'>
+            
         </Popup>
         <div class="pic-opreate" v-if='picshow'>
             <input type="file" multiple style="display:none;" id='pic'>
@@ -198,15 +204,19 @@
                 popshow_my: false,
                 popshow_setting:false,
                 c: false,
-                picshow: false
+                picshow: false,
+                popshow_writing:false
             }
         },
         mounted() {
 
         },
         methods: {
-            close: function () {
+            closedetail: function () {
                 this.popshow_my = false
+            },
+            closeset:function(){
+                this.popshow_setting=false
             },
             showPicBox: function () {
                 this.picshow = !this.picshow
@@ -433,5 +443,19 @@
     }
     .q {
         font-size:14px;
+    }
+    .pop-my-co {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+    .cooo {
+        font-size: 14px;
+    }
+    .setting-cp {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
     }
 </style>

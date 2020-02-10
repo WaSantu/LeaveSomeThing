@@ -65,6 +65,7 @@
     }
     .top {
         text-align: right;
+        margin-bottom: 20px;
     }
     .top span {
         cursor: pointer;

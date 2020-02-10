@@ -26,7 +26,8 @@
 .radio-wrap {
     position: relative;
     width: 35px;
-   
+    display: flex;
+    align-items: center;
 }
     input {
         height: 17px;
