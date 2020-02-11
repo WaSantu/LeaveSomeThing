@@ -15,7 +15,7 @@
             </div>
             <div class="opreate-cell" @click="()=>popshow_setting=true">
                 <img src="../../assets/img/setting.png" alt="">
-            </div> 
+            </div>
         </div>
         <Footer />
         <Popup :show.sync='popshow_my' @maskclick='closedetail'>
@@ -63,7 +63,7 @@
             </div>
         </Popup>
         <Popup :show.sync='popshow_writing' @maskclick='closeset'>
-            
+
         </Popup>
         <div class="pic-opreate" v-if='picshow'>
             <input type="file" multiple style="display:none;" id='pic'>
@@ -160,7 +160,9 @@
                 <div class="forpic">
                     <div class="imgbox">
                         <img class="img-button" src="../../assets/img/prev.png" alt="">
-                        <img class="img-pic" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581006252582&di=0064d39b1897e5d98590b9fd2ff4c836&imgtype=0&src=http%3A%2F%2Fa3.att.hudong.com%2F14%2F75%2F01300000164186121366756803686.jpg" alt="">
+                        <img class="img-pic"
+                            src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581006252582&di=0064d39b1897e5d98590b9fd2ff4c836&imgtype=0&src=http%3A%2F%2Fa3.att.hudong.com%2F14%2F75%2F01300000164186121366756803686.jpg"
+                            alt="">
                         <img class='img-button' src="../../assets/img/next.png" alt="">
                     </div>
                     <div class="img-length">
@@ -178,8 +180,23 @@
                     </div>
                     <div class="pic-co">
                         <span>照片描述:</span>
-                        <span class="q">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</span>
+                        <span
+                            class="q">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</span>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="writing-mask" v-if='popshow_writing'>
+            <div class="writing-pop">
+                <textarea class="writing-area" @keydown="textareaTab" v-model="write_value">
+
+                </textarea>
+                <span class="writing-tip">自动保存:2020年1月11日</span>
+                <span class="writing-tip">上次保存时间：2020年1月11日</span>
+                <span class="writing-tip">*请勿保存任何有关</span>
+                <div class="writing-opreate">
+                    <Button text='保存' width='70'/>
+                    <span class="cancel w">关闭</span>
                 </div>
             </div>
         </div>
@@ -202,10 +219,11 @@
         data() {
             return {
                 popshow_my: false,
-                popshow_setting:false,
+                popshow_setting: false,
                 c: false,
                 picshow: false,
-                popshow_writing:false
+                popshow_writing: false,
+                write_value:""
             }
         },
         mounted() {
@@ -215,8 +233,8 @@
             closedetail: function () {
                 this.popshow_my = false
             },
-            closeset:function(){
-                this.popshow_setting=false
+            closeset: function () {
+                this.popshow_setting = false
             },
             showPicBox: function () {
                 this.picshow = !this.picshow
@@ -227,6 +245,12 @@
             },
             test2: function (e) {
                 e.preventDefault();
+            },
+            textareaTab:function(e){
+                if(e.keyCode == 9) {
+                     e.preventDefault()
+                    this.write_value += "    "
+                }
             }
         }
     }
@@ -376,6 +400,7 @@
         width: 100px;
         background: #ccc;
     }
+
     .cell-wrap {
         width: 100%;
         height: 100%;
@@ -386,22 +411,27 @@
         display: flex;
         flex-wrap: wrap;
     }
+
     .pic-cell {
         margin-bottom: 20px;
         transition: all .2s ease;
         cursor: pointer;
     }
+
     .pic-cell:hover {
         transform: scale(1.1);
     }
-    .pic-cell:nth-child(3n-1){
+
+    .pic-cell:nth-child(3n-1) {
         margin: 0 20px;
     }
+
     .pic-layout {
-        flex:1;
+        flex: 1;
         display: flex;
 
     }
+
     .pic-detail {
         width: 300px;
         height: 100vh;
@@ -409,53 +439,113 @@
         padding: 20px;
         box-sizing: border-box;
     }
+
     .forpic {
-        flex:1;
+        flex: 1;
         box-shadow: 0 0 5px #d5d5d5;
         display: flex;
         align-items: center;
-        justify-content: center;    
+        justify-content: center;
         flex-direction: column;
     }
+
     .img-pic {
         margin: 0 20px;
         width: 500px;
     }
+
     .imgbox {
         display: flex;
         align-items: center;
         justify-content: center;
     }
-    .img-button{
+
+    .img-button {
         width: 32px;
         height: 32px;
         cursor: pointer;
     }
+
     .img-length {
         font-size: 20px;
         color: #fff;
         margin-top: 15px;
     }
+
     .pic-co {
         display: flex;
         flex-direction: column;
         margin-bottom: 15px;
     }
+
     .q {
-        font-size:14px;
+        font-size: 14px;
     }
+
     .pop-my-co {
         display: flex;
         flex-direction: column;
         margin-bottom: 10px;
     }
+
     .cooo {
         font-size: 14px;
     }
+
     .setting-cp {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
+    }
+
+    .writing-mask {
+        height: 100vh;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, .1);
+    }
+
+    .writing-pop {
+        width: 800px;
+        height: 700px;
+        box-shadow: 0 0 5px #dedede;
+        border-radius: 5px;
+        background: #fff;
+        box-sizing: border-box;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .writing-area {
+        box-shadow: inset 0 0 5px #dedede;
+        border: none;
+        outline: none;
+        resize: none;
+        width: 100%;
+        border-radius: 5px;
+        height: 500px;
+        box-sizing: border-box;
+        padding: 10px 20px;
+        text-indent: 15px;
+    }
+    
+    .writing-tip {
+        font-size: 14px;
+        margin-top: 5px;
+    }
+    .w {
+        width: 70px;
+        height: 35px;
+    }
+    .writing-opreate {
+        display: flex;
+        justify-content: flex-end;
     }
 </style>

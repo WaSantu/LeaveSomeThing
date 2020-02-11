@@ -36,6 +36,9 @@ input {
     border: none;
     outline: none;
 }
+input,textarea {
+    font-family: s;
+}
 ::placeholder {
     color: #dcdfe5;
 }

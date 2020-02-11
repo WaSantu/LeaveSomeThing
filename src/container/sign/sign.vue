@@ -104,6 +104,11 @@
 <script>
     import Footer from '../../components/footer/footer'
     import Button from '../../components/button/button'
+
+    import {userSign} from '../../data/data'
+    var data = {
+        SANTA:'DADAD'
+    }
     export default {
         name: 'sign',
         components: {
@@ -158,6 +163,9 @@
             },
             test: function () {
                 this.loading = true
+                userSign(1,2,3,4,5,6,7,8).then(r=>{
+                    console.log(r)
+                })
             }
         }
     }
@@ -285,6 +293,7 @@
         justify-content: flex-end;
         align-items: flex-end;
     }
+
     .back img {
         cursor: pointer;
     }
