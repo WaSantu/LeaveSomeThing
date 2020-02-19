@@ -30,12 +30,12 @@
                 <div class="form-user-account" v-if="step == 2 ">
                     <div class="inputbox">
                         <div class="input">
-                            <input type="password" placeholder="请填写账号">
+                            <input placeholder="请填写账号" v-model="signInfo.account">
                         </div>
                     </div>
                     <div class="inputbox">
                         <div class="input">
-                            <input type="password" placeholder="请填写密码">
+                            <input type="password" placeholder="请填写密码" v-model="signInfo.password">
                         </div>
                     </div>
                     <div class="sign-button" @click="()=>step = 3">下一步</div>
@@ -46,12 +46,17 @@
                 <div class="form-user-info" v-if="step == 3 ">
                     <div class="inputbox">
                         <div class="input">
-                            <input type="password" placeholder="请填写交付方手机号">
+                            <input placeholder="请填写交付方手机号" v-model="signInfo.to_phone">
                         </div>
                     </div>
                     <div class="inputbox">
                         <div class="input">
-                            <input type="password" placeholder="请填写交付方姓名">
+                            <input placeholder="请填写交付方备用联系方式" v-model="signInfo.to_backup_contact">
+                        </div>
+                    </div>
+                    <div class="inputbox">
+                        <div class="input">
+                            <input placeholder="请填写交付方姓名" v-model="signInfo.to_name">
                         </div>
                         <div class="inputinfo">
                             <span>*请务必保证信息真实性</span>
@@ -67,30 +72,30 @@
                 <div class="form-user-info" v-if="step == 4 ">
                     <div class="inputbox">
                         <div class="input">
-                            <input type="password" placeholder="请填写手机号">
+                            <input placeholder="请填写手机号" v-model="signInfo.phone">
                         </div>
                     </div>
                     <div class="inputbox">
                         <div class="input">
-                            <input type="password" placeholder="请填写验证码" class="code">
+                            <input  placeholder="请填写验证码" class="code">
                             <span class="codebutton" @click="getCode">{{alreadygetcode?codetime:'获取'}}</span>
                         </div>
                     </div>
                     <div class="inputbox">
                         <div class="input">
-                            <input type="password" placeholder="请填写备用联系方式，如微信号，QQ号或邮箱">
+                            <input placeholder="请填写备用联系方式，如微信号，QQ号或邮箱" v-model="signInfo.backup_contact">
                         </div>
                     </div>
                     <div class="inputbox">
                         <div class="input">
-                            <input type="password" placeholder="请填写姓名">
+                            <input  placeholder="请填写姓名" v-model="signInfo.name">
                         </div>
                         <div class="inputinfo">
                             <span>*我们需要您的真实手机号码及姓名以方便回访</span>
                             <span>*请务必保证备用联系方式的可靠性</span>
                         </div>
                     </div>
-                    <Button text='注册' width='300' :loading="loading" @bClick='test' />
+                    <Button text='注册' width='300' :loading="loading" @bClick='submit' />
                     <div class="back">
                         <img src="../../assets/img/back.png" alt="" @click="step -= 1">
                     </div>
@@ -125,7 +130,17 @@
                 step: 2,
                 codetime: 60,
                 alreadygetcode: false,
-                loading: false
+                loading: false,
+                signInfo:{
+                    accout:'',
+                    password:'',
+                    name:'',
+                    phone:'',
+                    backup_contact:'',
+                    to_name:'',
+                    to_phone:'',
+                    to_backup_contact:''
+                }
             }
         },
         mounted() {
@@ -161,9 +176,10 @@
                     }
                 }, 1000)
             },
-            test: function () {
+            submit: function () {
                 this.loading = true
-                userSign(1,2,3,4,5,6,7,8).then(r=>{
+                let {account,password,phone,name,backup_contact,to_phone,to_name,to_backup_contact} = this.signInfo
+                userSign(account,password,phone,name,backup_contact,to_phone,to_name,to_backup_contact).then(r=>{
                     console.log(r)
                 })
             }
