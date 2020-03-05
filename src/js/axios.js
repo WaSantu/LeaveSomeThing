@@ -1,5 +1,5 @@
 import Axios from 'axios'
-
+import Vue from 'vue'
 
 class Ajax {
     static normalpost(o,
@@ -17,9 +17,12 @@ class Ajax {
                 headers: headers,
             }).then(r => {
                 if (r.data.code == 401) {
-
+                    Vue.prototype.$MyMessage({
+                        type:'fail',
+                        text:'用户登陆时间过期'
+                    })
                 } else {
-                    resolve(r)
+                    resolve(r.data)
                 }
             }).catch(r => {
                 reject(r)

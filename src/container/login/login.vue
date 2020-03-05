@@ -6,10 +6,10 @@
             </div>
             <div class="form">
                 <div class="input">
-                    <input type="text" placeholder="请输入账号">
+                    <input type="text" placeholder="请输入账号" v-model="account">
                 </div>
                 <div class="input">
-                    <input type="password" placeholder="请输入密码">
+                    <input type="password" placeholder="请输入密码" v-model="password">
                 </div>
             </div>
             <div class="login-tip">
@@ -25,6 +25,8 @@
 <script>
 import Footer from '../../components/footer/footer'
 import Button from '../../components/button/button'
+
+import {userLogin} from '../../data/data'
 export default {
     name:'login',
     components:{
@@ -33,13 +35,29 @@ export default {
     },
     data() {
         return {
-            loading:false
+            loading:false,
+            account:'',
+            password:''
         }
+    },
+    mounted(){
+        
     },
     methods: {
         submit:function(){
             this.loading = true
-            this.$router.push({path:'/opreate'})
+            userLogin(this.account,this.password).then(r=>{
+                if(r.code == 200){
+                    window.localStorage['token']= r.data.token
+                    this.$store.commit('updateUserInfo',r.data.userinfo)
+                    this.loading = false
+                    this.$router.push({path:'/opreate'})
+                }else{
+                    
+                    this.loading = false
+
+                }
+            })
         }
     },
 }
