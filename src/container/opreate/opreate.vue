@@ -66,7 +66,7 @@
 
         </Popup> -->
         <div class="pic-opreate" v-if='picshow'>
-            <input type="file" multiple style="display:none;" id='pic'>
+            <input type="file" multiple style="display:none;" id='pic' @change='uploadPicFile'>
             <div class="pic-func">
                 <div class="pic-upload">
                     <div class="pic-choose" @drop="test" @dragover="test2">
@@ -210,7 +210,7 @@
     import Button from '../../components/button/button'
 
     import format from '../../js/formate'
-    import {getUserInfo,textUpdate} from '../../data/data'
+    import {getUserInfo,textUpdate,picUpload} from '../../data/data'
     let timer
 
     export default {
@@ -233,7 +233,8 @@
                 loading:{
                     text_loading:false
                 },
-                autosaveTime:''
+                autosaveTime:'',
+                pic_file:[]
             }
         },
         mounted() {
@@ -307,6 +308,24 @@
                         }
                     })
                 },60000)
+            },
+            uploadPicFile:function(e){
+                let file = [...e.target.files]
+                let form = new FormData()
+                file.forEach((val,index)=>{
+                    if(val.type.slice(0,5) != 'image'){
+                        this.$Message({
+                            type:'fail',
+                            text:'请上传图片文件'
+                        })
+                        return false
+                    }
+                    form.append(`img`,val)
+                })
+                form.append('imglength',file.length)
+                picUpload(form).then(r=>{
+                    console.log(r)
+                })
             }
         }
     }
