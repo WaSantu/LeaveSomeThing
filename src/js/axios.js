@@ -1,6 +1,6 @@
 import Axios from 'axios'
 import Vue from 'vue'
-
+import router from '../router/router'
 class Ajax {
     static normalpost(o,
         data = {},
@@ -17,10 +17,11 @@ class Ajax {
                 headers: headers,
             }).then(r => {
                 if (r.data.code == 401) {
-                    Vue.prototype.$MyMessage({
+                    Vue.prototype.$Message({
                         type:'fail',
                         text:'用户登陆时间过期'
                     })
+                    router.push({path:'/login'})
                 } else {
                     resolve(r.data)
                 }

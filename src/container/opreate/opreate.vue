@@ -1,7 +1,7 @@
 <template>
     <div class="opreate-page">
         <div class="opreate">
-            <div class="opreate-cell" @click="()=>popshow_writing=true">
+            <div class="opreate-cell" @click="openNote">
                 <img src="../../assets/img/note.png" alt="">
             </div>
             <div class="opreate-cell" @click='showPicBox'>
@@ -22,31 +22,31 @@
             <div class="">
                 <div class="pop-my-co">
                     <span>账号名:</span>
-                    <span class="cooo">测试</span>
+                    <span class="cooo">{{$store.state.userinfo.account}}</span>
                 </div>
                 <div class="pop-my-co">
                     <span>空间使用:</span>
-                    <span class="cooo">50/100mb</span>
+                    <span class="cooo">{{$store.state.userinfo.ram}}/100mb</span>
                 </div>
                 <div class="pop-my-co">
                     <span>手机号码:</span>
-                    <span class="cooo">18981662752</span>
+                    <span class="cooo">{{$store.state.userinfo.phone}}</span>
                 </div>
                 <div class="pop-my-co">
                     <span>备用联系方式:</span>
-                    <span class="cooo">18981662752</span>
+                    <span class="cooo">{{$store.state.userinfo.backup_contact}}</span>
                 </div>
                 <div class="pop-my-co">
                     <span>本人姓名:</span>
-                    <span class="cooo">测试的</span>
+                    <span class="cooo">{{$store.state.userinfo.name}}</span>
                 </div>
                 <div class="pop-my-co">
                     <span>交付人姓名:</span>
-                    <span class="cooo">测试</span>
+                    <span class="cooo">{{$store.state.userinfo.to_name}}</span>
                 </div>
                 <div class="pop-my-co">
                     <span>交付人联系电话:</span>
-                    <span class="cooo">18981662752</span>
+                    <span class="cooo">{{$store.state.userinfo.to_phone}}</span>
                 </div>
             </div>
         </Popup>
@@ -62,9 +62,9 @@
                 </div>
             </div>
         </Popup>
-        <Popup :show.sync='popshow_writing' @maskclick='closeset'>
+        <!-- <Popup :show.sync='popshow_writing' @maskclick='closeset'>
 
-        </Popup>
+        </Popup> -->
         <div class="pic-opreate" v-if='picshow'>
             <input type="file" multiple style="display:none;" id='pic'>
             <div class="pic-func">
@@ -191,12 +191,12 @@
                 <textarea class="writing-area" @keydown="textareaTab" v-model="write_value">
 
                 </textarea>
-                <span class="writing-tip">自动保存:2020年1月11日</span>
-                <span class="writing-tip">上次保存时间：2020年1月11日</span>
+                <span class="writing-tip" v-if='last_save'>上次保存时间：{{last_save}}</span>
+                <span class="writing-tip" v-show='autosaveTime'>自动保存: {{autosaveTime}}</span>
                 <span class="writing-tip">*请勿保存任何有关</span>
                 <div class="writing-opreate">
-                    <Button text='保存' width='70'/>
-                    <span class="cancel w">关闭</span>
+                    <Button text='保存' width='70' @bClick="updateText" :loading='loading.text_loading'/>
+                    <span class="cancel w" @click="closeNote">关闭</span>
                 </div>
             </div>
         </div>
@@ -208,6 +208,11 @@
     import Popup from '../../components/popup/popup'
     import Radio from '../../components/radio/radio'
     import Button from '../../components/button/button'
+
+    import format from '../../js/formate'
+    import {getUserInfo,textUpdate} from '../../data/data'
+    let timer
+
     export default {
         name: 'Opreate',
         components: {
@@ -223,11 +228,29 @@
                 c: false,
                 picshow: false,
                 popshow_writing: false,
-                write_value:""
+                last_save:'',
+                write_value:"",
+                loading:{
+                    text_loading:false
+                },
+                autosaveTime:''
             }
         },
         mounted() {
-
+            if(!this.$store.state.userinfo.account){
+                getUserInfo().then(r=>{
+                    this.$store.commit('updateUserInfo',r.data)
+                    if(this.$store.state.userinfo.text[0]){
+                        this.write_value = this.$store.state.userinfo.text[0].content
+                        this.last_save = format(this.$store.state.userinfo.text[0].savetime,true)
+                    }
+                })
+            }else{
+                if(this.$store.state.userinfo.text[0]){
+                    this.write_value = this.$store.state.userinfo.text[0].content
+                    this.last_save = format(this.$store.state.userinfo.text[0].savetime,true)
+                }
+            }
         },
         methods: {
             closedetail: function () {
@@ -251,6 +274,39 @@
                      e.preventDefault()
                     this.write_value += "    "
                 }
+            },
+            openNote:function(){
+                this.popshow_writing=true
+                this.autoSave()
+            },
+            closeNote:function(){
+                this.popshow_writing = false
+                clearInterval(timer)
+                timer = null
+            },
+            updateText:function(){
+                this.loading.text_loading = true
+                textUpdate(this.write_value,(+new Date()/1000).toFixed(0)).then(r=>{
+                    if(r.code  == 200){
+                        this.$store.commit('updateText',r.data)
+                        this.loading.text_loading = false
+                        this.last_save = format(r.data.savetime,true)
+                        this.$Message({
+                            type:'success',
+                            text:'保存成功'
+                        })
+                    }
+                })
+            },
+            autoSave:function(){
+                timer = setInterval(()=>{
+                    textUpdate(this.write_value,(+new Date()/1000).toFixed(0)).then(r=>{
+                        if(r.code  == 200){
+                            this.$store.commit('updateText',r.data)
+                            this.autosaveTime = format(r.data.savetime,true)
+                        }
+                    })
+                },60000)
             }
         }
     }

@@ -10,8 +10,19 @@ const userLogin = (account,password) => ajax('/api/user/login',{
     account,password
 })
 
+const accountCheck = (account) => ajax('/api/user/sign/check',{
+    account
+})
 
+const getUserInfo = () => ajax('/api/opreate/getuserinfo')
+
+const textUpdate =(content,date)=>ajax('/api/word/update',{
+    content,date
+})
 export {
     userSign,
-    userLogin
+    userLogin,
+    accountCheck,
+    getUserInfo,
+    textUpdate
 }

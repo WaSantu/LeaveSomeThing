@@ -45,17 +45,23 @@ export default {
     },
     methods: {
         submit:function(){
-            this.loading = true
+            // this.loading = true
             userLogin(this.account,this.password).then(r=>{
                 if(r.code == 200){
                     window.localStorage['token']= r.data.token
                     this.$store.commit('updateUserInfo',r.data.userinfo)
                     this.loading = false
+                    this.$Message({
+                        type:'success',
+                        text:"登陆成功"
+                    })
                     this.$router.push({path:'/opreate'})
                 }else{
-                    
+                    this.$Message({
+                        type:'fail',
+                        text:"用户名或密码错误"
+                    })
                     this.loading = false
-
                 }
             })
         }

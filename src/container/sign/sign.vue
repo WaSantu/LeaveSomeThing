@@ -30,8 +30,9 @@
                 <div class="form-user-account" v-if="step == 2 ">
                     <div class="inputbox">
                         <div class="input">
-                            <input placeholder="请填写账号" v-model="signInfo.account">
+                            <input placeholder="请填写账号" v-model="signInfo.account" @blur="checkoutAccount" :class="[accountalready?'warninginput':'']">
                         </div>
+                        <span class="account-tip" v-if='accountalready'>账号已存在</span>
                     </div>
                     <div class="inputbox">
                         <div class="input">
@@ -110,7 +111,7 @@
     import Footer from '../../components/footer/footer'
     import Button from '../../components/button/button'
 
-    import {userSign} from '../../data/data'
+    import {userSign,accountCheck} from '../../data/data'
     var data = {
         SANTA:'DADAD'
     }
@@ -132,7 +133,7 @@
                 alreadygetcode: false,
                 loading: false,
                 signInfo:{
-                    accout:'',
+                    account:'',
                     password:'',
                     name:'',
                     phone:'',
@@ -140,7 +141,8 @@
                     to_name:'',
                     to_phone:'',
                     to_backup_contact:''
-                }
+                },
+                accountalready:false
             }
         },
         mounted() {
@@ -180,7 +182,31 @@
                 this.loading = true
                 let {account,password,phone,name,backup_contact,to_phone,to_name,to_backup_contact} = this.signInfo
                 userSign(account,password,phone,name,backup_contact,to_phone,to_name,to_backup_contact).then(r=>{
-                    console.log(r)
+                    if(r.code ==200){
+                        window.localStorage['token'] = r.data.token
+                        this.$store.commit('updateUserInfo',r.data.userinfo)
+                        this.$Message({
+                            text:'注册成功',
+                            type:'success'
+                        })
+                        this.$router.push({path:'/opreate'})
+                        this.loading = false
+                    }else{
+                        this.$Message({
+                            text:r.msg,
+                            type:'fail'
+                        })
+                        this.loading = false
+                    }
+                })
+            },
+            checkoutAccount:function(){
+                accountCheck(this.signInfo.account).then(r=>{
+                    if(r.code == 201){
+                        this.accountalready = true
+                    }else{
+                        this.accountalready = false
+                    }
                 })
             }
         }
@@ -348,5 +374,12 @@
 
     .form-leave-to {
         display: none;
+    }
+    .account-tip {
+        font-size: 12px;
+        color: #c45a65;
+    }
+    .warninginput {
+        border-color: #c45a65!important;
     }
 </style>

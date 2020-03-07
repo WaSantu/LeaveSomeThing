@@ -54,7 +54,7 @@ let mes = {
             },mes.animationTime)
         }
 
-        Vue.prototype.$MyMessage =  CreateMsg
+        Vue.prototype.$Message =  CreateMsg
         //将函数挂在到Vue的原型上，方便全局调用
     }
 }

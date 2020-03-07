@@ -1,7 +1,9 @@
 const mutations = {
     updateUserInfo(state,userinfo){
-        console.log(userinfo)
         state.userinfo = userinfo
+    },
+    updateText(state,textinfo){
+        state.userinfo.text[0] = textinfo
     }
 }
 

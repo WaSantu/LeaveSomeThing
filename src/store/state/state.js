@@ -17,7 +17,10 @@ const state = {
         //联系人备用联系方式
         to_backup_contact: '',
         //基础内存(mb)
-        ram: ''
+        ram: '',
+        //文字信息
+        text:[],
+        _id:''
     }
 }
 
