@@ -6,6 +6,10 @@ import store from '../src/store/store'
 Vue.config.productionTip = false
 Vue.use(mes)
 
+Vue.prototype.$img = function(url){
+  return `http://localhost:8889/${url}`
+}
+
 new Vue({
   render: h => h(App),
   router,

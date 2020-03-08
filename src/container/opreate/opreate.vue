@@ -26,7 +26,7 @@
                 </div>
                 <div class="pop-my-co">
                     <span>空间使用:</span>
-                    <span class="cooo">{{$store.state.userinfo.ram}}/100mb</span>
+                    <span class="cooo">{{$store.state.userinfo.ramed}}/{{$store.state.userinfo.ram}}</span>
                 </div>
                 <div class="pop-my-co">
                     <span>手机号码:</span>
@@ -69,119 +69,68 @@
             <input type="file" multiple style="display:none;" id='pic' @change='uploadPicFile'>
             <div class="pic-func">
                 <div class="pic-upload">
-                    <div class="pic-choose" @drop="test" @dragover="test2">
-                        <span>拖拽文件至此 或 <label class="lab" for='pic'>点击上传</label></span>
+                    <div class="pic-choose" @drop="dropfile" @dragover="dragover">
+                        <span v-if='pic_file.length ==0'>拖拽文件至此 或 <label class="lab" for='pic'>点击上传</label></span>
+                        <span v-for="(val,index) in pic_file" v-bind:key="index">{{val.name}}</span>
                     </div>
                     <div class="pic-des">
                         <div class="pic-name ppp">
                             <span>图片/图片组名称</span>
-                            <input type="text">
+                            <input type="text" v-model="pic_name">
                         </div>
                         <div class="pic-info ppp">
                             <span>图片/图片组描述</span>
-                            <textarea></textarea>
+                            <textarea v-model="pic_des"></textarea>
                         </div>
                         <div class="pic-submit">
-                            <Button text='上传' width='100' height='30' />
-                            <span class="cancel" @click="()=>picshow=false">取消</span>
+                            <Button text='上传' width='100' height='30' :loading='loading.pic_loading' @bClick='picupload' />
+                            <span class="cancel" @click="cancelPic">取消</span>
+                        </div>
+                        <div class="progress" v-if='progress.start'>
+                            <div :style="{width:300*progress.ing+'px'}" :class="[progress.ing==1?'finished':'','progress-ing']"></div>
+                            <span>{{(progress.ing*100).toFixed(0)}}%</span>
                         </div>
                     </div>
                 </div>
                 <div class="pic-display">
                     <div class="cell-wrap">
-                        <div class="pic-cell">
-                            <div class="img"></div>
+                        <div class="pic-cell" v-for="(item,index) in $store.state.userinfo.pic" v-bind:key="index">
+                            <div class="img">
+                                <img :src="$img(item.path[0])" alt="" @click="layoutpic(item)">
+                            </div>
+                            <!-- <div class="img-num">
+                                <span>3</span>
+                            </div> -->
                         </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-                        <div class="pic-cell">
-                            <div class="img"></div>
-                        </div>
-
                     </div>
                 </div>
             </div>
             <div class="pic-layout">
-                <div class="forpic">
+                <div class="forpic" v-if="pic_choose">
                     <div class="imgbox">
-                        <img class="img-button" src="../../assets/img/prev.png" alt="">
+                        <img class="img-button" src="../../assets/img/prev.png" alt="" v-if="pic_choose && pic_choose.path.length>1" @click="prev">
                         <img class="img-pic"
-                            src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581006252582&di=0064d39b1897e5d98590b9fd2ff4c836&imgtype=0&src=http%3A%2F%2Fa3.att.hudong.com%2F14%2F75%2F01300000164186121366756803686.jpg"
+                            :src="pic_choose.path[pic_index]"
                             alt="">
-                        <img class='img-button' src="../../assets/img/next.png" alt="">
+                        <img class='img-button' src="../../assets/img/next.png" alt="" v-if="pic_choose && pic_choose.path.length>1" @click="next">
                     </div>
-                    <div class="img-length">
-                        <span>1/9</span>
+                    <div class="img-length" v-if="pic_choose && pic_choose.path.length>1">
+                        <span>{{pic_index+1}}/{{pic_choose.path.length}}</span>
                     </div>
                 </div>
-                <div class="pic-detail">
+                <div class="pic-detail" v-if="pic_choose">
                     <div class="pic-co">
                         <span>上传时间:</span>
-                        <span class="q">2020年2月6日</span>
+                        <span class="q">{{pic_choose.time}}</span>
                     </div>
                     <div class="pic-co">
                         <span>照片名称:</span>
-                        <span class="q">哈哈哈哈</span>
+                        <span class="q">{{pic_choose.name}}</span>
                     </div>
                     <div class="pic-co">
                         <span>照片描述:</span>
                         <span
-                            class="q">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</span>
+                            class="q">{{pic_choose.des}}</span>
                     </div>
                 </div>
             </div>
@@ -222,22 +171,32 @@
             Button
         },
         data() {
-            return {
-                popshow_my: false,
-                popshow_setting: false,
-                c: false,
-                picshow: false,
-                popshow_writing: false,
-                last_save:'',
-                write_value:"",
+            return {                
+                popshow_my: false,//个人资料框
+                popshow_setting: false,//设置框
+                c: false,                
+                picshow: false,//图片浏览框                
+                popshow_writing: false,//文字框                
+                last_save:'',//文字内容上次保存时间
+                write_value:"",//文字内容
                 loading:{
-                    text_loading:false
+                    text_loading:false,//文字保存按钮loading
+                    pic_loading:false//图片保存按钮loading
                 },
-                autosaveTime:'',
-                pic_file:[]
+                autosaveTime:'',//自动保存时间
+                pic_file:[],//当前选择准备上传的图片
+                pic_name:'',//图片填写的名称
+                pic_des:'',//图片填写的描述
+                pic_choose:null,//当前选择的图片
+                pic_index:0,//当前选择图片的index
+                progress:{
+                    ing:'',//上传进度
+                    start:false //上传是否开始
+                }
             }
         },
         mounted() {
+            //同步vuex的缓存内容进data，主要是同步文字内容的
             if(!this.$store.state.userinfo.account){
                 getUserInfo().then(r=>{
                     this.$store.commit('updateUserInfo',r.data)
@@ -255,19 +214,22 @@
         },
         methods: {
             closedetail: function () {
+                //关闭个人选择框
                 this.popshow_my = false
             },
             closeset: function () {
+                //关闭设置框
                 this.popshow_setting = false
             },
             showPicBox: function () {
                 this.picshow = !this.picshow
             },
-            test: function (e) {
+            dropfile: function (e) {
                 e.preventDefault()
-                console.log(e.dataTransfer.files)
+                let files = [...e.dataTransfer.files]
+                this.pic_file = files
             },
-            test2: function (e) {
+            dragover: function (e) {
                 e.preventDefault();
             },
             textareaTab:function(e){
@@ -311,7 +273,18 @@
             },
             uploadPicFile:function(e){
                 let file = [...e.target.files]
+                this.pic_file = file
+            },
+            picupload:function(){
+                this.loading.pic_loading = true
+                let file = this.pic_file
+                let filesize = 0
+                file.forEach((val,index)=>{
+                    filesize += val.size
+                })
+                let realsize = (filesize/1024/1024).toFixed(1)
                 let form = new FormData()
+                form.append('imgsize',realsize)
                 file.forEach((val,index)=>{
                     if(val.type.slice(0,5) != 'image'){
                         this.$Message({
@@ -322,10 +295,62 @@
                     }
                     form.append(`img`,val)
                 })
-                form.append('imglength',file.length)
-                picUpload(form).then(r=>{
-                    console.log(r)
+                form.append('name',this.pic_name)
+                form.append('des',this.pic_des)
+                form.append('date',(+new Date()/1000).toFixed(0))
+                picUpload((r)=>{
+                    this.progress.start = true               
+                    let p = +(r.loaded / r.total).toFixed(2)
+                    this.progress.ing = p
+                },form).then(r=>{
+                    if(r.code == 200){
+                        this.$Message({
+                            type:'success',
+                            text:'上传成功'
+                        })
+                        this.$store.commit('updateUserRamed',r.userinfo)
+                        this.$store.commit('updatePic',r.pic)
+                        this.pic_file = []
+                        this.pic_name =''
+                        this.pic_des = ''
+                        this.progress.start = false
+                        this.loading.pic_loading = false
+                    }else{
+                        this.$Message({
+                            type:'fail',
+                            text:r.msg
+                        })
+                        this.pic_file = []
+                        this.pic_name =''
+                        this.pic_des = ''
+                        this.progress.start = false
+                        this.loading.pic_loading = false
+                    }
                 })
+            },
+            layoutpic:function(e){
+                this.pic_index = 0
+                e.time = format(e.savetime,true)
+                this.pic_choose = e 
+            },
+            prev:function(){
+                if(this.pic_index == 0){
+                    this.pic_index = this.pic_choose.path.length-1
+                }else{
+                    this.pic_index-=1
+                }
+            },
+            next:function(){
+                if(this.pic_index == this.pic_choose.path.length -1){
+                    this.pic_index = 0
+                }else{
+                    this.pic_index +=1
+                }
+            },
+            cancelPic:function(){
+                this.picshow = false
+                this.pic_choose=null
+                this.pic_index=0
             }
         }
     }
@@ -396,6 +421,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
     }
 
     .lab {
@@ -473,9 +499,13 @@
     .img {
         height: 120px;
         width: 100px;
-        background: #ccc;
+        transition: all .2s ease;
+        z-index: 99;
     }
-
+    .img img {
+        height: 100%;
+        width: 100%;
+    }
     .cell-wrap {
         width: 100%;
         height: 100%;
@@ -489,11 +519,12 @@
 
     .pic-cell {
         margin-bottom: 20px;
-        transition: all .2s ease;
+        position: relative;
         cursor: pointer;
+        height: 121px;
     }
 
-    .pic-cell:hover {
+    .img:hover {
         transform: scale(1.1);
     }
 
@@ -622,5 +653,31 @@
     .writing-opreate {
         display: flex;
         justify-content: flex-end;
+    }
+    .img-num {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+    }
+    .progress {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        font-size: 12px;
+    }
+    .progress-ing {
+        height: 10px;
+        background: #5698c3;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px; 
+        transition: width .2s ease;
+        margin-right: 10px;
+    }
+    .finished {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px; 
     }
 </style>

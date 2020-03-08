@@ -18,8 +18,10 @@ const state = {
         to_backup_contact: '',
         //基础内存(mb)
         ram: '',
+        ramed:'',
         //文字信息
         text:[],
+        pic:[],
         _id:''
     }
 }

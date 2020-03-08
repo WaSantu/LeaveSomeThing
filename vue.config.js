@@ -11,6 +11,13 @@ module.exports = {
           pathRewrite: {
             '^/api': '/api' //代理的路径
           }
+        },
+        '/public':{
+          target: 'http://127.0.0.1:8889', //代理接口
+          changeOrigin: false,
+          pathRewrite: {
+            '^/public': '/public' //代理的路径
+          }
         }
       }
     }

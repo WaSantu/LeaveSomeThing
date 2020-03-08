@@ -30,7 +30,7 @@ class Ajax {
             })
         })
     }
-    static filepost(o,
+    static filepost(cb,o,
         data,
         type = 'POST',
         headers = {
@@ -44,10 +44,9 @@ class Ajax {
                     data: data,
                     headers: headers,
                     onUploadProgress:(p)=>{
-                        console.log(p)
+                        cb(p)
                     }
                 }).then(r => {
-                    console.log(data)
                     if (r.data.code == 401) {
                         Vue.prototype.$Message({
                             type:'fail',

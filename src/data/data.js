@@ -21,7 +21,7 @@ const textUpdate =(content,date)=>ajax('/api/word/update',{
     content,date
 })
 
-const picUpload = (data) => fileajax('/api/pic/upload',data)
+const picUpload = (cb,data) => fileajax(cb,'/api/pic/upload',data)
 export {
     userSign,
     userLogin,
